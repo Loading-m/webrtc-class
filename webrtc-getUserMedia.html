@@ -122,7 +122,6 @@
           navigator.mediaDevices
             .enumerateDevices()
             .then(function (devices) {
-              console.log(devices, 111);
               devices.forEach(function (device) {
                 let obj = {
                   id: device.deviceId,
@@ -135,7 +134,7 @@
                       (e) => e.id === device.deviceId
                     ).length === 0
                   ) {
-                    localDevice.audioIn.push(obj);
+                    localDevice.audioIn.push({...obj, label: obj.label || '音频输入' + device.deviceId});
                   }
                 }
                 if (device.kind === "audiooutput") {
@@ -144,7 +143,7 @@
                       (e) => e.id === device.deviceId
                     ).length === 0
                   ) {
-                    localDevice.audioOut.push(obj);
+                    localDevice.audioOut.push({...obj, label: obj.label || '音频输出' + device.deviceId});
                   }
                 }
                 if (device.kind === "videoinput") {
@@ -153,7 +152,7 @@
                       (e) => e.id === device.deviceId
                     ).length === 0
                   ) {
-                    localDevice.videoIn.push(obj);
+                    localDevice.videoIn.push({...obj, label: obj.label || '视频输入' + device.deviceId});
                   }
                 }
               });

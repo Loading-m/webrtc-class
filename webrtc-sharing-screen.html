@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>共享屏幕</title>
+    <style>
+      #localdemo02 {
+        width: 500px;
+        height: 400px;
+      }
+    </style>
+  </head>
+  <body>
+    <video id="localdemo02" autoplay controls muted></video>
+    <script>
+      function handleError(error) {
+        console.error(
+          "navigator.MediaDevices.getDisplayMedia error: ",
+          error.message,
+          error.name
+        );
+      }
+      /**
+       * 获取屏幕分享的媒体流
+       * @author suke
+       * @returns {Promise<void>}
+       */
+      async function getShareMedia() {
+        const constraints = {
+          video: { width: 1920, height: 1080 },
+          audio: true,
+        };
+        if (window.stream) {
+          window.stream.getTracks().forEach((track) => {
+            track.stop();
+          });
+        }
+        return await navigator.mediaDevices
+          .getDisplayMedia(constraints)
+          .catch(handleError);
+      }
+      getShareMedia().then((stream) => {
+        let domId = "localdemo02";
+        let video = document.getElementById(domId);
+        if (video) {
+          console.log(stream);
+          video.srcObject = stream;
+          video.muted = true;
+        }
+      });
+    </script>
+  </body>
+</html>
